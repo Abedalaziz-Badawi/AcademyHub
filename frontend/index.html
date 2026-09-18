@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AcademyHub — Sports Academy Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="loginWrap" id="loginScreen">
+  <form class="loginCard" id="loginForm">
+    <div class="brand"><div class="logo">A</div><div><strong>AcademyHub</strong><span>SPORTS MANAGEMENT</span></div></div>
+    <h1>Sign in</h1>
+    <p class="sub">Enter your admin credentials to continue.</p>
+    <div class="field"><label>Username</label><input id="loginUsername" name="username" autocomplete="username" required></div>
+    <div class="field"><label>Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div>
+    <div class="loginError" id="loginError"></div>
+    <button class="primary" type="submit" id="loginSubmit">Sign in</button>
+  </form>
+</div>
+<div class="app" id="appRoot" style="display:none">
+  <aside class="side">
+    <div class="brand"><div class="logo">A</div><div><strong>AcademyHub</strong><span>SPORTS MANAGEMENT</span></div></div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard">🏆 <span>Dashboard</span></button>
+      <button data-page="players">🏃 <span>Players</span></button>
+      <button data-page="subscriptions">💳 <span>Subscriptions</span></button>
+      <button data-page="attendance">📋 <span>Attendance</span></button>
+      <button data-page="notifications">🔔 <span>Notifications</span></button>
+      <button data-page="settings">⚙️ <span>Settings</span></button>
+    </nav>
+    <div class="sidefoot">© 2026 AcademyHub<br>Everything in one place.<br><button class="link" id="logoutBtn" style="margin-top:8px;padding:0">Sign out</button></div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div><div class="eyebrow" id="eyebrow">Overview</div><div class="title" id="pageTitle">Good afternoon 👋</div>
+      <div class="sub">Here’s what’s happening at your academy today.</div></div>
+      <div class="user"><div class="avatar">AA</div><div><b>Academy Admin</b><div class="sub">Administrator</div></div></div>
+    </div>
+
+    <section class="page active" id="dashboard">
+      <div class="cards">
+        <div class="card metric"><div><div class="label">Total Players</div><div class="num" id="mPlayers">—</div><div class="trend">↑ Growing academy</div></div><div class="metricicon">🏃</div></div>
+        <div class="card metric"><div><div class="label">Active Subscriptions</div><div class="num" id="mActive">—</div><div class="trend">Healthy membership</div></div><div class="metricicon green">✅</div></div>
+        <div class="card metric"><div><div class="label">Expiring Soon</div><div class="num" id="mExpiring">—</div><div class="trend amberText">Next 7 days</div></div><div class="metricicon amber">⏳</div></div>
+        <div class="card metric"><div><div class="label">Expired</div><div class="num" id="mExpired">—</div><div class="trend redText">Needs attention</div></div><div class="metricicon red">⚠️</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="sectionhead"><h3>Revenue overview</h3><span class="sub">Last 6 months</span></div><div class="chartbox"><canvas id="revenueChart"></canvas></div></div>
+        <div class="card"><div class="sectionhead"><h3>Recent activity</h3><button class="link" onclick="showPage('notifications')">View all</button></div><div class="activity" id="activity"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="sectionhead"><h3>Attendance today</h3><span class="badge active">Live</span></div>
+          <div class="attstats"><div><div class="num" id="attPresent">—</div><div class="sub">Present</div></div><div><div class="num" id="attAbsent">—</div><div class="sub">Absent</div></div><div><div class="num" id="attPct">—</div><div class="sub">Rate</div></div></div>
+        </div>
+        <div class="card"><div class="sectionhead"><h3>Renewals needed</h3><button class="link" onclick="showPage('subscriptions')">Manage</button></div><div id="renewalMini"></div></div>
+      </div>
+    </section>
+
+    <section class="page" id="players">
+      <div class="toolbar"><div class="search"><input id="playerSearch" placeholder="Search by name, sport or category…"></div>
+        <select class="select" id="sportFilter"><option value="">All sports</option><option>Football</option><option>Basketball</option><option>Swimming</option><option>Volleyball</option><option>Taekwondo</option></select>
+        <select class="select" id="statusFilter"><option value="">All status</option><option>Active</option><option>Inactive</option></select>
+        <button class="primary" onclick="openPlayerModal()">＋ Add Player</button>
+      </div>
+      <div class="card tablecard"><table class="table"><thead><tr><th>Player</th><th>Age / Gender</th><th>Sport</th><th>Category</th><th>Subscription</th><th>Status</th><th></th></tr></thead><tbody id="playersBody"></tbody></table></div>
+    </section>
+
+    <section class="page" id="subscriptions">
+      <div class="toolbar"><div class="search"><input id="subSearch" placeholder="Search subscriptions…"></div>
+        <select class="select" id="subFilter"><option value="">All statuses</option><option>Active</option><option>Expiring Soon</option><option>Expired</option></select>
+        <button class="primary" onclick="openSubModal()">＋ New Subscription</button>
+      </div>
+      <div class="card tablecard"><table class="table"><thead><tr><th>Player</th><th>Plan</th><th>Start</th><th>Expiry</th><th>Price</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead><tbody id="subsBody"></tbody></table></div>
+    </section>
+
+    <section class="page" id="attendance">
+      <div class="toolbar"><input class="select" type="date" id="attDate"><select class="select" id="attCategory"><option value="">All categories</option><option>U10</option><option>U12</option><option>U14</option><option>U16</option><option>Senior</option></select></div>
+      <div class="card"><div class="sectionhead"><div><h3>Daily attendance</h3><div class="sub">Mark each player as present or absent.</div></div><button class="primary" onclick="saveAttendance()">Save attendance</button></div><div id="attendanceList"></div></div>
+    </section>
+
+    <section class="page" id="notifications"><div class="card"><div class="sectionhead"><div><h3>Renewal reminders</h3><div class="sub">Keep families informed before subscriptions expire.</div></div></div><div id="notificationsList"></div></div></section>
+    <section class="page" id="settings"><div class="card"><div class="sectionhead"><div><h3>Academy settings</h3><div class="sub">Configure the academy information shown across AcademyHub.</div></div><button class="primary" onclick="saveSettings()">Save changes</button></div><div id="settingsForm" class="formgrid"></div></div></section>
+    <section class="page" id="profile"><button class="back" onclick="showPage('players')">← Back to Players</button><div class="card" id="profileContent"></div></section>
+  </main>
+</div>
+<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><h3 id="modalTitle"></h3><button class="x" onclick="closeModal()">×</button></div><div id="modalContent"></div></div></div>
+<div class="toast" id="toast"></div>
+<script src="/js/app.js"></script>
+</body></html>

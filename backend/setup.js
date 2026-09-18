@@ -1,0 +1,6 @@
+const fs=require('fs');const path=require('path');const {Pool}=require('pg');require('dotenv').config();
+const root=path.join(__dirname,'../database/schema.sql');
+(async()=>{const admin=new Pool({host:process.env.DB_HOST||'localhost',port:Number(process.env.DB_PORT||5432),database:'postgres',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||''});
+try{const db=process.env.DB_NAME||'academyhub';const exists=await admin.query('SELECT 1 FROM pg_database WHERE datname=$1',[db]);if(!exists.rowCount)await admin.query(`CREATE DATABASE "${db}"`);console.log(`Database ${db} is ready`)}catch(e){console.error('Database creation failed:',e.message);process.exit(1)}finally{await admin.end()}
+const pool=new Pool({host:process.env.DB_HOST||'localhost',port:Number(process.env.DB_PORT||5432),database:process.env.DB_NAME||'academyhub',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||''});
+try{await pool.query(fs.readFileSync(root,'utf8'));console.log('Schema created');await pool.end();require('./seed')}catch(e){console.error('Schema setup failed:',e.message);process.exit(1)}})();
