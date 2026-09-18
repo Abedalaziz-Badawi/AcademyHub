@@ -31,6 +31,7 @@
       <button data-page="attendance">📋 <span>Attendance</span></button>
       <button data-page="notifications">🔔 <span>Notifications</span></button>
       <button data-page="settings">⚙️ <span>Settings</span></button>
+      <button data-page="staff" id="staffNavBtn" style="display:none">🔑 <span>Staff</span></button>
     </nav>
     <div class="sidefoot">© 2026 AcademyHub<br>Everything in one place.<br><button class="link" id="logoutBtn" style="margin-top:8px;padding:0">Sign out</button></div>
   </aside>
@@ -39,7 +40,7 @@
     <div class="top">
       <div><div class="eyebrow" id="eyebrow">Overview</div><div class="title" id="pageTitle">Good afternoon 👋</div>
       <div class="sub">Here’s what’s happening at your academy today.</div></div>
-      <div class="user"><div class="avatar">AA</div><div><b>Academy Admin</b><div class="sub">Administrator</div></div></div>
+      <div class="user"><div class="avatar" id="userAvatar">AA</div><div><b id="userName">Academy Admin</b><div class="sub" id="userRole">Administrator</div></div></div>
     </div>
 
     <section class="page active" id="dashboard">
@@ -85,6 +86,10 @@
 
     <section class="page" id="notifications"><div class="card"><div class="sectionhead"><div><h3>Renewal reminders</h3><div class="sub">Keep families informed before subscriptions expire.</div></div></div><div id="notificationsList"></div></div></section>
     <section class="page" id="settings"><div class="card"><div class="sectionhead"><div><h3>Academy settings</h3><div class="sub">Configure the academy information shown across AcademyHub.</div></div><button class="primary" onclick="saveSettings()">Save changes</button></div><div id="settingsForm" class="formgrid"></div></div></section>
+    <section class="page" id="staff">
+      <div class="toolbar"><div></div><button class="primary" onclick="openStaffModal()">＋ Add staff</button></div>
+      <div class="card tablecard"><table class="table"><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Added</th><th></th></tr></thead><tbody id="staffBody"></tbody></table></div>
+    </section>
     <section class="page" id="profile"><button class="back" onclick="showPage('players')">← Back to Players</button><div class="card" id="profileContent"></div></section>
   </main>
 </div>
