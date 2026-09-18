@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: academyhub
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_SSL
+        value: "true"
+      - key: DB_HOST
+        fromDatabase:
+          name: academyhub-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: academyhub-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: academyhub-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: academyhub-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: academyhub-db
+          property: password
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: AUTH_SECRET
+        sync: false
+
+databases:
+  - name: academyhub-db
+    plan: free

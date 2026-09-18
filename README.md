@@ -80,6 +80,18 @@ AcademyHub/
 └── README.md
 ```
 
+## Deploying so others can use it without installing anything
+
+This repo includes a `render.yaml` for one-click deployment on [Render](https://render.com):
+
+1. Push this repo to GitHub (already done if you're reading this from there).
+2. In Render, click **New > Blueprint**, connect this repo, and Render will read `render.yaml` and provision both the web service and a managed Postgres database automatically.
+3. Render will prompt you to fill in three secret values it can't generate itself: `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `AUTH_SECRET` (a random string, 32+ characters — quote it if it contains `#`, since `.env` parsing treats `#` as a comment start).
+4. Once the web service deploys, open its **Shell** tab and run `npm run migrate` once to create the database schema, and optionally `npm run seed` to load demo data.
+5. Visit the `.onrender.com` URL Render gives the web service — that's now a shared link anyone can open, no local setup required.
+
+The free tier spins down after inactivity and takes ~30-60s to wake up on the next visit — fine for sharing with a team, not for serious production traffic.
+
 ## Troubleshooting
 
 **password authentication failed**  

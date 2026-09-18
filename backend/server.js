@@ -8,7 +8,7 @@ require('dotenv').config();
 types.setTypeParser(1082,val=>val);
 
 const app=express();
-const pool=new Pool({host:process.env.DB_HOST||'localhost',port:Number(process.env.DB_PORT||5432),database:process.env.DB_NAME||'academyhub',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||''});
+const pool=new Pool({host:process.env.DB_HOST||'localhost',port:Number(process.env.DB_PORT||5432),database:process.env.DB_NAME||'academyhub',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||'',ssl:process.env.DB_SSL==='true'?{rejectUnauthorized:false}:false});
 app.use(cors());app.use(express.json({limit:'8mb'}));app.use(express.static(path.join(__dirname,'../frontend')));
 
 const clean=v=>typeof v==='string'?v.trim():v;

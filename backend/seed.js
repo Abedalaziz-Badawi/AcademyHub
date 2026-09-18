@@ -1,5 +1,5 @@
 const {Pool}=require('pg');require('dotenv').config();
-const pool=new Pool({host:process.env.DB_HOST||'localhost',port:Number(process.env.DB_PORT||5432),database:process.env.DB_NAME||'academyhub',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||''});
+const pool=new Pool({host:process.env.DB_HOST||'localhost',port:Number(process.env.DB_PORT||5432),database:process.env.DB_NAME||'academyhub',user:process.env.DB_USER||'postgres',password:process.env.DB_PASSWORD||'',ssl:process.env.DB_SSL==='true'?{rejectUnauthorized:false}:false});
 const players=[
 ['Ahmed','Khaled','2015-04-12','Male','Football','U12','Coach Omar'],['Yousef','Ali','2012-08-21','Male','Football','U14','Coach Omar'],
 ['Rana','Nabil','2014-02-09','Female','Basketball','U14','Coach Lina'],['Noor','Fadi','2016-11-03','Female','Swimming','U10','Coach Samer'],
