@@ -28,16 +28,17 @@ app.all('/api/data',requireAuth,async(req,res)=>{
  try{
   if(req.method==='GET'){
    if(type==='dashboard'){
-    const [p,s,a,r,rev,activity,att]=await Promise.all([
+    const [p,s,a,r,rev,activity,att,trend]=await Promise.all([
       q("SELECT count(*)::int AS total FROM players"),
       q("SELECT count(*)::int AS total FROM (SELECT DISTINCT ON (player_id) expiry_date FROM subscriptions ORDER BY player_id, expiry_date DESC) s WHERE expiry_date >= CURRENT_DATE"),
       q("SELECT count(*)::int AS total FROM (SELECT DISTINCT ON (player_id) expiry_date FROM subscriptions ORDER BY player_id, expiry_date DESC) s WHERE expiry_date BETWEEN CURRENT_DATE AND CURRENT_DATE + 7"),
       q("SELECT count(*)::int AS total FROM (SELECT DISTINCT ON (player_id) expiry_date FROM subscriptions ORDER BY player_id, expiry_date DESC) s WHERE expiry_date < CURRENT_DATE"),
       q("SELECT COALESCE(sum(amount),0)::numeric AS total FROM subscriptions WHERE payment_status='Paid' AND date_trunc('month', created_at)=date_trunc('month', CURRENT_DATE)"),
       q("SELECT id,action,detail,created_at FROM activity_log ORDER BY created_at DESC LIMIT 8"),
-      q("SELECT count(*) FILTER (WHERE status='Present')::int AS present,count(*) FILTER (WHERE status='Absent')::int AS absent FROM attendance WHERE attendance_date=CURRENT_DATE")
+      q("SELECT count(*) FILTER (WHERE status='Present')::int AS present,count(*) FILTER (WHERE status='Absent')::int AS absent FROM attendance WHERE attendance_date=CURRENT_DATE"),
+      q("SELECT to_char(m.month,'Mon') AS label, COALESCE(sum(s.amount),0)::numeric AS total FROM generate_series(date_trunc('month', CURRENT_DATE) - interval '5 months', date_trunc('month', CURRENT_DATE), interval '1 month') AS m(month) LEFT JOIN subscriptions s ON date_trunc('month', s.created_at)=m.month AND s.payment_status='Paid' GROUP BY m.month ORDER BY m.month")
     ]);
-    return res.json({totalPlayers:p.rows[0].total,activeSubscriptions:s.rows[0].total,expiringSoon:a.rows[0].total,expiredSubscriptions:r.rows[0].total,monthlyRevenue:rev.rows[0].total,todayAttendance:att.rows[0],activity:activity.rows});
+    return res.json({totalPlayers:p.rows[0].total,activeSubscriptions:s.rows[0].total,expiringSoon:a.rows[0].total,expiredSubscriptions:r.rows[0].total,monthlyRevenue:rev.rows[0].total,todayAttendance:att.rows[0],activity:activity.rows,revenueTrend:trend.rows});
    }
    if(type==='players'){
     const search=clean(req.query.search||'');const params=[];let where='';
