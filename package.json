@@ -4,6 +4,6 @@
   "private":true,
   "description":"AcademyHub sports academy management MVP",
   "main":"backend/server.js",
-  "scripts":{"start":"node backend/server.js","setup":"node backend/setup.js","seed":"node backend/seed.js"},
+  "scripts":{"start":"node backend/server.js","setup":"node backend/setup.js","seed":"node backend/seed.js","migrate":"node backend/migrate.js"},
   "dependencies":{"cors":"^2.8.5","dotenv":"^16.4.5","express":"^4.21.2","pg":"^8.13.1"}
 }
